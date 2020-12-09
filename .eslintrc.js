@@ -18,6 +18,7 @@ module.exports = {
 		"quotes": ["warn", "single"],
 		"padded-blocks": "off",
 		"space-before-blocks": "warn",
+		"dot-notation": "warn",
 		"no-multi-spaces": "warn",
 		"space-before-function-paren": "off",
 		"import/no-duplicates": "warn", // весь импорт из одного файла в одной строке

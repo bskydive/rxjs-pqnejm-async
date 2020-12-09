@@ -1,4 +1,3 @@
-
 /* eslint-disable no-console */
 
 let result = 0;
@@ -7,16 +6,30 @@ let result = 0;
 
 // source.subscribe(console.log);
 
+/**
+ * provide system timestamp for browser and node
+ */
+function getMsec() {
+  if (typeof window !== 'undefined') {
+	//browser
+    return window["performance"].now();
+  }
+  if (typeof process !== 'undefined') {
+	//node
+    return global["process"].hrtime()[0];
+  }
+}
+
 console.log(1);
 
 result = 0;
 for (let i = 0; i < 100000000; i++) {
   result++;
 }
-console.log('accumulator1:', result);
+console.log("accumulator1:", result);
 
 const promise = new Promise((resolve, reject) => {
-  console.log('promise 1 resolved');
+  console.log("promise 1 resolved");
   resolve(true);
 });
 
@@ -42,11 +55,11 @@ result = 0;
 for (let i = 0; i < 100000000; i++) {
   result++;
 }
-console.log('accumulator2:', result);
+console.log("accumulator2:", result);
 
 console.log(7);
 
-let a = performance.now();
+let a = getMsec();
 let m = [];
 
 for (let i = 0; i < 5000000; i++) {
@@ -58,10 +71,10 @@ m.forEach((item, index) => {
   j += m[index];
 });
 
-console.log(a, performance.now(), (performance.now() - a) / 1000);
+console.log(a, getMsec(), (getMsec() - a) / 1000);
 //1206217 1206989 0.772
 // for
-a = performance.now();
+a = getMsec();
 m = [];
 for (let i = 0; i < 5000000; i++) {
   m.push(i);
@@ -70,5 +83,5 @@ for (let i = 0; i < m.length; i++) {
   let j = 0;
   j += m[i];
 }
-console.log(a, performance.now(), (performance.now() - a) / 1000);
+console.log(a, getMsec(), (getMsec() - a) / 1000);
 //1108951 1110126 1.175

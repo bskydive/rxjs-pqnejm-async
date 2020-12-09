@@ -1,13 +1,11 @@
-import { of } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 /* eslint-disable no-console */
 
 let result = 0;
 
-const source = of('World').pipe(map((x) => `Hello ${x}!`));
+// const source = of('World').pipe(map((x) => `Hello ${x}!`));
 
-source.subscribe(console.log);
+// source.subscribe(console.log);
 
 console.log(1);
 

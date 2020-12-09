@@ -1,49 +1,55 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
 var rxjs_1 = require("rxjs");
 var operators_1 = require("rxjs/operators");
+
 /* eslint-disable no-console */
 var result = 0;
-var source = rxjs_1.of('World').pipe(operators_1.map(function (x) { return "Hello " + x + "!"; }));
+var source = rxjs_1.of('World').pipe(operators_1.map(function (x) {
+	return "Hello " + x + "!";
+}));
 source.subscribe(console.log);
 console.log(1);
 result = 0;
 for (var i = 0; i < 100000000; i++) {
-    result++;
+	result++;
 }
 console.log('accumulator1:', result);
 var promise = new Promise(function (resolve, reject) {
-    console.log('promise 1 resolved');
-    resolve(true);
+	console.log('promise 1 resolved');
+	resolve(true);
 });
 promise.then(function () {
-    setTimeout(function () {
-        console.log(2);
-    });
+	setTimeout(function () {
+		console.log(2);
+	});
 });
 setTimeout(function () {
-    console.log(3);
+	console.log(3);
 }, 500);
 setTimeout(function () {
-    console.log(5);
+	console.log(5);
 }, 0);
 promise.then(function () {
-    console.log(6);
+	console.log(6);
 });
 result = 0;
 for (var i = 0; i < 100000000; i++) {
-    result++;
+	result++;
 }
 console.log('accumulator2:', result);
 console.log(7);
 var a = performance.now();
 var m = [];
 for (var i = 0; i < 5000000; i++) {
-    m.push(i);
+	m.push(i);
 }
 m.forEach(function (item, index) {
-    var j = 0;
-    j += m[index];
+	var j = 0;
+	j += m[index];
 });
 console.log(a, performance.now(), (performance.now() - a) / 1000);
 //1206217 1206989 0.772
@@ -51,11 +57,11 @@ console.log(a, performance.now(), (performance.now() - a) / 1000);
 a = performance.now();
 m = [];
 for (var i = 0; i < 5000000; i++) {
-    m.push(i);
+	m.push(i);
 }
 for (var i = 0; i < m.length; i++) {
-    var j = 0;
-    j += m[i];
+	var j = 0;
+	j += m[i];
 }
 console.log(a, performance.now(), (performance.now() - a) / 1000);
 //1108951 1110126 1.175

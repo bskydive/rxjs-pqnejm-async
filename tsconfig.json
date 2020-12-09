@@ -1,0 +1,30 @@
+{
+	"compileOnSave": false,
+	"files": [
+		"index.ts",
+
+	],
+	"include": [
+		"src/*.ts"
+	],
+	"compilerOptions": {
+		"outDir": "./",
+		"declaration": false,
+		"module": "commonjs",
+		"downlevelIteration": true,
+		"moduleResolution": "node",
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"target": "es5",
+		"alwaysStrict": true,
+		"typeRoots": [
+			"node_modules/@types"
+		],
+		"lib": [
+			"es2018",
+			"dom"
+		],
+		"resolveJsonModule": true,
+		"types": ["node"],
+	}
+}

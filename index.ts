@@ -10,12 +10,12 @@ let result = 0;
  * provide system timestamp for browser and node
  */
 function getMsec() {
-  if (typeof window !== 'undefined') {
-	//browser
+  if (typeof window !== "undefined") {
+    //browser
     return window["performance"].now();
   }
-  if (typeof process !== 'undefined') {
-	//node
+  if (typeof process !== "undefined") {
+    //node
     return global["process"].hrtime()[0];
   }
 }

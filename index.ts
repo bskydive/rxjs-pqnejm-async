@@ -25,7 +25,7 @@ function sumLoop(index: number, count: number): number {
 	let result = 0;
 
 	if (isLogStart) {
-		console.log(`syncTaskLoopStart\tSTART\t№${index},\tstart:${start}`);
+		console.log(`sumLoopStart\tSTART\t№${index},\tstart:${start}`);
 	}
 
 	for (let i = 0; i < count; i++) {
@@ -33,7 +33,7 @@ function sumLoop(index: number, count: number): number {
 	}
 
 	stop = getMsec();
-	console.log(`syncTaskLoopStart\tSTOP\t№${index},\tstop:${stop},\tduration: ${(stop - start) / 1000}`);
+	console.log(`sumLoopStart\tSTOP\t№${index},\tstop:${stop},\tduration: ${(stop - start) / 1000}`);
 
 	return result;
 }
@@ -82,7 +82,7 @@ function resolvePromiseTimeout$(index: number, promise: Promise<any>, delay: num
 		setTimeout(() => {
 			stop = getMsec();
 			console.log(
-				`resolvePromise\tSTOP\t№${index},\tstop:${stop},\tduration: ${(stop - start) / 1000}`
+				`resolvePromise\tSTOP\t№${index},\tstop:${stop},\tduration: ${(stop - start) / 1000},\tdelay:${delay}`
 			);
 		}, delay);
 	});
@@ -98,7 +98,7 @@ function asyncTimeout$(index: number, delay: number): unknown {
 
 	return setTimeout(() => {
 		stop = getMsec();
-		console.log(`asyncTimeout\tSTOP\t№${index},\tstop:${stop},\tduration: ${(stop - start) / 1000}`);
+		console.log(`asyncTimeout\tSTOP\t№${index},\tstop:${stop},\tduration: ${(stop - start) / 1000},\tdelay: ${delay}`);
 	}, delay);
 }
 
@@ -106,10 +106,7 @@ function syncTask(index: number) {
 	let start = getMsec();
 	let stop = getMsec();
 
-	if (isLogStart) {
 		console.log(`syncTaskStart\tSTART\t№${index},\tstart:${start}`);
-	}
-
 	// console.log(`syncTaskStart\tSTOP\t№${index},\tstop:${stop},\tduration: ${(stop - start) / 1000}`);
 }
 
@@ -122,7 +119,6 @@ let ps: Promise<any>;
 //=========================================================================================
 
 /* 
-console.log(1),
 	console.log(1),
 	const promise = new Promise(resolve => {​​​​​​​​ resolve() }​​​​​​​​),
 	promise.then(() => {​​​​​​​​ setTimeout(() => {​​​​​​​​ console.log(2); }​​​​​​​​) }​​​​​​​​),
@@ -133,11 +129,11 @@ console.log(1),
 	console.log(7),
 */
 
-syncTask(0);
-ps = createPromise$(1);
-resolvePromiseTimeout$(2, ps, 0);
-resolvePromiseTimeout$(3, ps, 500);
-asyncTimeout$(4, 500);
-asyncTimeout$(5, 0);
-resolvePromise$(6, ps);
-syncTask(7);
+sumLoop(1,1000000);
+ps = createPromise$(2);
+resolvePromiseTimeout$(3, ps, 0);
+resolvePromiseTimeout$(4, ps, 100);
+asyncTimeout$(5, 100);
+asyncTimeout$(6, 0);
+resolvePromise$(7, ps);
+syncTask(8);

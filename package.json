@@ -1,5 +1,5 @@
 {
-	"name": "rxjs",
+	"name": "rxjs-pqnejm-async",
 	"version": "0.0.0",
 	"private": true,
 	"scripts": {
@@ -18,6 +18,7 @@
 		"eslint-plugin-node": "^11.1.0",
 		"eslint-plugin-promise": "^4.2.1",
 		"eslint-plugin-standard": "^5.0.0",
+		"rxjs": "^6.6.3",
 		"rxjs-tslint-rules": "^4.34.7",
 		"ts-node": "^9.1.1",
 		"tslint": "^6.1.3",

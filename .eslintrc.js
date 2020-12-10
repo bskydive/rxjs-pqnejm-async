@@ -17,6 +17,7 @@ module.exports = {
 		"linebreak-style": ["warn", "unix"],
 		"quotes": ["warn", "single"],
 		"padded-blocks": "off",
+		"no-irregular-whitespace": "off",
 		"space-before-blocks": "warn",
 		"dot-notation": "warn",
 		"no-multi-spaces": "warn",

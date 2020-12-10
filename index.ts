@@ -1,87 +1,143 @@
 /* eslint-disable no-console */
 
-let result = 0;
-
 // const source = of('World').pipe(map((x) => `Hello ${x}!`));
 
 // source.subscribe(console.log);
+
 
 /**
  * provide system timestamp for browser and node
  */
 function getMsec() {
-  if (typeof window !== "undefined") {
-    //browser
-    return window["performance"].now();
-  }
-  if (typeof process !== "undefined") {
-    //node
-    return global["process"].hrtime()[0];
-  }
+	if (typeof window !== 'undefined') {
+		//browser
+		return window['performance'].now();
+	}
+	if (typeof process !== 'undefined') {
+		//node
+		return global['process'].hrtime()[0];
+	}
 }
 
-console.log(1);
+function sumLoop(index: number, count: number): number {
+	let start = getMsec();
+	let stop = getMsec();
+	let result = 0;
 
-result = 0;
-for (let i = 0; i < 100000000; i++) {
-  result++;
-}
-console.log("accumulator1:", result);
+	if (isLogStart) {
+		console.log(`syncTaskLoopStart\tSTART\t№${index},\tstart:${start}`);
+	}
 
-const promise = new Promise((resolve, reject) => {
-  console.log("promise 1 resolved");
-  resolve(true);
-});
+	for (let i = 0; i < count; i++) {
+		result++;
+	}
 
-promise.then(() => {
-  setTimeout(() => {
-    console.log(2);
-  });
-});
+	stop = getMsec();
+	console.log(`syncTaskLoopStart\tSTOP\t№${index},\tstop:${stop},\tduration: ${(stop - start) / 1000}`);
 
-setTimeout(() => {
-  console.log(3);
-}, 500);
-
-setTimeout(() => {
-  console.log(5);
-}, 0);
-
-promise.then(() => {
-  console.log(6);
-});
-
-result = 0;
-for (let i = 0; i < 100000000; i++) {
-  result++;
-}
-console.log("accumulator2:", result);
-
-console.log(7);
-
-let a = getMsec();
-let m = [];
-
-for (let i = 0; i < 5000000; i++) {
-  m.push(i);
+	return result;
 }
 
-m.forEach((item, index) => {
-  let j = 0;
-  j += m[index];
-});
+function createPromise$(index: number): Promise<any> {
+	let start = getMsec();
+	let stop = getMsec();
+	let result = null;
 
-console.log(a, getMsec(), (getMsec() - a) / 1000);
-//1206217 1206989 0.772
-// for
-a = getMsec();
-m = [];
-for (let i = 0; i < 5000000; i++) {
-  m.push(i);
+	if (isLogStart) {
+		console.log(`createPromise\tSTART\t№${index},\tstart:${start}`);
+	}
+
+	result = new Promise((resolve, reject) => {
+		stop = getMsec();
+		console.log(`createPromise\tSTOP\t№${index},\tstop:${stop},\tduration: ${(stop - start) / 1000}`);
+		resolve(true);
+	});
+
+	return result;
 }
-for (let i = 0; i < m.length; i++) {
-  let j = 0;
-  j += m[i];
+
+function resolvePromise$(index: number, promise: Promise<any>) {
+	let start = getMsec();
+	let stop = getMsec();
+
+	if (isLogStart) {
+		console.log(`resolvePromise\tSTART\t№${index},\tstart:${start}`);
+	}
+
+	promise.then(() => {
+		stop = getMsec();
+		console.log(`resolvePromise\tSTOP\t№${index},\tstop:${stop},\tduration: ${(stop - start) / 1000}`);
+	});
 }
-console.log(a, getMsec(), (getMsec() - a) / 1000);
-//1108951 1110126 1.175
+
+function resolvePromiseTimeout$(index: number, promise: Promise<any>, delay: number) {
+	let start = getMsec();
+	let stop = getMsec();
+
+	if (isLogStart) {
+		console.log(`resolvePromise\tSTART\t№${index},\tstart:${start},\tdelay:${delay}`);
+	}
+
+	promise.then(() => {
+		setTimeout(() => {
+			stop = getMsec();
+			console.log(
+				`resolvePromise\tSTOP\t№${index},\tstop:${stop},\tduration: ${(stop - start) / 1000}`
+			);
+		}, delay);
+	});
+}
+
+function asyncTimeout$(index: number, delay: number): unknown {
+	let start = getMsec();
+	let stop = getMsec();
+
+	if (isLogStart) {
+		console.log(`asyncTimeout\tSTART\t№${index},\tstart:${start},\tdelay: ${delay}`);
+	}
+
+	return setTimeout(() => {
+		stop = getMsec();
+		console.log(`asyncTimeout\tSTOP\t№${index},\tstop:${stop},\tduration: ${(stop - start) / 1000}`);
+	}, delay);
+}
+
+function syncTask(index: number) {
+	let start = getMsec();
+	let stop = getMsec();
+
+	if (isLogStart) {
+		console.log(`syncTaskStart\tSTART\t№${index},\tstart:${start}`);
+	}
+
+	// console.log(`syncTaskStart\tSTOP\t№${index},\tstop:${stop},\tduration: ${(stop - start) / 1000}`);
+}
+
+let isLogStart = true;
+let taskQueue: Function[];
+let ps: Promise<any>;
+
+//=========================================================================================
+//=========================================================================================
+//=========================================================================================
+
+/* 
+console.log(1),
+	console.log(1),
+	const promise = new Promise(resolve => {​​​​​​​​ resolve() }​​​​​​​​),
+	promise.then(() => {​​​​​​​​ setTimeout(() => {​​​​​​​​ console.log(2); }​​​​​​​​) }​​​​​​​​),
+	setTimeout(() => {​​​​​​​​ console.log(3); }​​​​​​​​, 500),
+	setImmediate(() => {​​​​​​​​ console.log(4); }​​​​​​​​),
+	setTimeout(() => {​​​​​​​​ console.log(5); }​​​​​​​​, 0),
+	promise.then(() => {​​​​​​​​ console.log(6); }​​​​​​​​),
+	console.log(7),
+*/
+
+syncTask(0);
+ps = createPromise$(1);
+resolvePromiseTimeout$(2, ps, 0);
+resolvePromiseTimeout$(3, ps, 500);
+asyncTimeout$(4, 500);
+asyncTimeout$(5, 0);
+resolvePromise$(6, ps);
+syncTask(7);

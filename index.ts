@@ -113,7 +113,7 @@ function syncTask(index: number) {
 	// console.log(`syncTaskStart\tSTOP\t№${index},\tstop:${stop},\tduration: ${(stop - start) / 1000}`);
 }
 
-let isLogStart = true;
+let isLogStart = false;
 let taskQueue: Function[];
 let ps: Promise<any>;
 

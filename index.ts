@@ -4,18 +4,31 @@
 
 // source.subscribe(console.log);
 
-
 /**
- * provide system timestamp for browser and node
+ * provide system timestamp for browser(msec) and node(nanosec)
  */
-function getMsec() {
+function getMsec(): bigint {
 	if (typeof window !== 'undefined') {
 		//browser
-		return window['performance'].now();
+		return BigInt(window['performance'].now());
 	}
 	if (typeof process !== 'undefined') {
-		//node
-		return global['process'].hrtime()[0];
+		//node nanoseconds
+		return global['process'].hrtime.bigint();
+	}
+}
+
+/**
+ * provide system timestamp difference for browser(msec) and node(nanosec)
+ */
+function getSecDiff(start: bigint, stop: bigint): bigint {
+	if (typeof window !== 'undefined') {
+		//browser
+		return (stop - start) / 1000n;
+	}
+	if (typeof process !== 'undefined') {
+		//node nanoseconds
+		return (stop - start) / 1000000000n;
 	}
 }
 
@@ -33,7 +46,9 @@ function sumLoop(index: number, count: number): number {
 	}
 
 	stop = getMsec();
-	console.log(`sumLoopStart\tSTOP\t№${index},\tstop:${stop},\tduration: ${(stop - start) / 1000}`);
+	console.log(
+		`sumLoopStart\tSTOP\t№${index},\tstop:${stop},\tduration: ${getSecDiff(start, stop)}`
+	);
 
 	return result;
 }
@@ -49,7 +64,9 @@ function createPromise$(index: number): Promise<any> {
 
 	result = new Promise((resolve, reject) => {
 		stop = getMsec();
-		console.log(`createPromise\tSTOP\t№${index},\tstop:${stop},\tduration: ${(stop - start) / 1000}`);
+		console.log(
+			`createPromise\tSTOP\t№${index},\tstop:${stop},\tduration: ${getSecDiff(start, stop)}`
+		);
 		resolve(true);
 	});
 
@@ -66,7 +83,9 @@ function resolvePromise$(index: number, promise: Promise<any>) {
 
 	promise.then(() => {
 		stop = getMsec();
-		console.log(`resolvePromise\tSTOP\t№${index},\tstop:${stop},\tduration: ${(stop - start) / 1000}`);
+		console.log(
+			`resolvePromise\tSTOP\t№${index},\tstop:${stop},\tduration: ${getSecDiff(start, stop)}`
+		);
 	});
 }
 
@@ -82,7 +101,10 @@ function resolvePromiseTimeout$(index: number, promise: Promise<any>, delay: num
 		setTimeout(() => {
 			stop = getMsec();
 			console.log(
-				`resolvePromise\tSTOP\t№${index},\tstop:${stop},\tduration: ${(stop - start) / 1000},\tdelay:${delay}`
+				`resolvePromise\tSTOP\t№${index},\tstop:${stop},\tduration: ${getSecDiff(
+					start,
+					stop
+				)},\tdelay:${delay}`
 			);
 		}, delay);
 	});
@@ -98,7 +120,12 @@ function asyncTimeout$(index: number, delay: number): unknown {
 
 	return setTimeout(() => {
 		stop = getMsec();
-		console.log(`asyncTimeout\tSTOP\t№${index},\tstop:${stop},\tduration: ${(stop - start) / 1000},\tdelay: ${delay}`);
+		console.log(
+			`asyncTimeout\tSTOP\t№${index},\tstop:${stop},\tduration: ${getSecDiff(
+				start,
+				stop
+			)},\tdelay: ${delay}`
+		);
 	}, delay);
 }
 
@@ -106,11 +133,11 @@ function syncTask(index: number) {
 	let start = getMsec();
 	let stop = getMsec();
 
-		console.log(`syncTaskStart\tSTART\t№${index},\tstart:${start}`);
-	// console.log(`syncTaskStart\tSTOP\t№${index},\tstop:${stop},\tduration: ${(stop - start) / 1000}`);
+	console.log(`syncTaskStart\tSTART\t№${index},\tstart:${start}`);
+	// console.log(`syncTaskStart\tSTOP\t№${index},\tstop:${stop},\tduration: ${getSecDiff(start,stop)}`);
 }
 
-let isLogStart = false;
+let isLogStart = true;
 let taskQueue: Function[];
 let ps: Promise<any>;
 
@@ -129,7 +156,7 @@ let ps: Promise<any>;
 	console.log(7),
 */
 
-sumLoop(1,1000000);
+sumLoop(1, 10000000000);
 ps = createPromise$(2);
 resolvePromiseTimeout$(3, ps, 0);
 resolvePromiseTimeout$(4, ps, 100);

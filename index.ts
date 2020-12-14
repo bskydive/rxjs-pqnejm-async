@@ -164,3 +164,47 @@ asyncTimeout$(5, 100);
 asyncTimeout$(6, 0);
 resolvePromise$(7, ps);
 syncTask(8);
+
+/*
+// firefox 
+
+// node
+sumLoopStart    START   №1,     start:22692215835052
+sumLoopStart    STOP    №1,     stop:22699270876360,    duration: 7
+createPromise   START   №2,     start:22699271186610
+createPromise   STOP    №2,     stop:22699271237520,    duration: 0
+resolvePromise  START   №3,     start:22699271284580,   delay:0
+resolvePromise  START   №4,     start:22699271305930,   delay:100
+asyncTimeout    START   №5,     start:22699271347840,   delay: 100
+asyncTimeout    START   №6,     start:22699271671910,   delay: 0
+resolvePromise  START   №7,     start:22699271776930
+syncTaskStart   START   №8,     start:22699271814390
+resolvePromise  STOP    №7,     stop:22699272133760,    duration: 0
+asyncTimeout    STOP    №6,     stop:22699272371900,    duration: 0,    delay: 0
+resolvePromise  STOP    №3,     stop:22699273545120,    duration: 0,    delay:0
+asyncTimeout    STOP    №5,     stop:22699371773869,    duration: 0,    delay: 100
+resolvePromise  STOP    №4,     stop:22699372988809,    duration: 0,    delay:100
+*/
+
+
+/*
+let p;
+p = new Promise((resolve) => {resolve(null);}).then(() => {setTimeout(() => {console.log(2)}, 0);}).then(() => {setTimeout(() => {console.log(3)}, 0);});
+p = new Promise((resolve) => {resolve(null);}).then(() => {setTimeout(() => {console.log(4)}, 0);});
+p = setTimeout(() => {console.log(5)}, 0);
+
+output:
+5
+2
+4
+3
+
+queue:
+p = new Promise((resolve) => {resolve();})
+p = new Promise((resolve) => {resolve();})
+p = setTimeout(() => {console.log(5)}, 0);
+.then(() => {setTimeout(() => {console.log(2)}, 0);})
+.then(() => {setTimeout(() => {console.log(4)}, 0);});
+.then(() => {setTimeout(() => {console.log(3)}, 0);});
+
+*/

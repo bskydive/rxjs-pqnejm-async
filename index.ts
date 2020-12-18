@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs';
+
 /* eslint-disable no-console */
 
 // const source = of('World').pipe(map((x) => `Hello ${x}!`));
@@ -10,7 +12,9 @@
 function getMsec(): bigint {
 	if (typeof window !== 'undefined') {
 		//browser
-		return BigInt(window['performance'].now());
+		return BigInt(window['performance'].now()
+			.toFixed() // in chrome: Uncaught RangeError: The number 14.20999999754713 cannot be converted to a BigInt because it is not an integer
+		); 
 	}
 	if (typeof process !== 'undefined') {
 		//node nanoseconds
@@ -137,74 +141,267 @@ function syncTask(index: number) {
 	// console.log(`syncTaskStart\tSTOP\t№${index},\tstop:${stop},\tduration: ${getSecDiff(start,stop)}`);
 }
 
-let isLogStart = true;
+
+//=========================================================================================
+//====================================== RUNNER ===========================================
+//=========================================================================================
+
 let taskQueue: Function[];
 let ps: Promise<any>;
 
-//=========================================================================================
-//=========================================================================================
-//=========================================================================================
+/**
+ * just code
+ * output
+ // firefox
+	1
+	7
+	6
+	5
+	2
+	3
+ // node
+	1
+	7
+	6
+	5
+	2
+	4
+	3
 
-/* 
-	console.log(1),
-	const promise = new Promise(resolve => {​​​​​​​​ resolve() }​​​​​​​​),
-	promise.then(() => {​​​​​​​​ setTimeout(() => {​​​​​​​​ console.log(2); }​​​​​​​​) }​​​​​​​​),
-	setTimeout(() => {​​​​​​​​ console.log(3); }​​​​​​​​, 500),
-	setImmediate(() => {​​​​​​​​ console.log(4); }​​​​​​​​),
-	setTimeout(() => {​​​​​​​​ console.log(5); }​​​​​​​​, 0),
-	promise.then(() => {​​​​​​​​ console.log(6); }​​​​​​​​),
-	console.log(7),
-*/
+	1
+	7
+	6
+	4
+	5
+	2
+	3
 
-sumLoop(1, 10000000000);
-ps = createPromise$(2);
-resolvePromiseTimeout$(3, ps, 0);
-resolvePromiseTimeout$(4, ps, 100);
-asyncTimeout$(5, 100);
-asyncTimeout$(6, 0);
-resolvePromise$(7, ps);
-syncTask(8);
+	1
+	7
+	6
+	5
+	4
+	2
+	3
+	*/
+// prettier-ignore
+function runExampleSimple() {
+	console.log(1);
+	const promise = new Promise(resolve => {​​​​​​​​ resolve(null) }​​​​​​​​);
+	promise.then(() => {​​​​​​​​ setTimeout(() => {​​​​​​​​ console.log(2); }​​​​​​​​) }​​​​​​​​);
+	setTimeout(() => {​​​​​​​​ console.log(3); }​​​​​​​​, 500);
+	if (typeof process !== 'undefined') {  // node
+		setImmediate(() => {​​​​​​​​ console.log(4); }​​​​​​​​);
+	}
+	setTimeout(() => {​​​​​​​​ console.log(5); }​​​​​​​​, 0);
+	promise.then(() => {​​​​​​​​ console.log(6); }​​​​​​​​);
+	console.log(7);
+}
 
-/*
-// firefox 
+/**
+ * with time logging
+ * output
+ // firefox
 
-// node
-sumLoopStart    START   №1,     start:22692215835052
-sumLoopStart    STOP    №1,     stop:22699270876360,    duration: 7
-createPromise   START   №2,     start:22699271186610
-createPromise   STOP    №2,     stop:22699271237520,    duration: 0
-resolvePromise  START   №3,     start:22699271284580,   delay:0
-resolvePromise  START   №4,     start:22699271305930,   delay:100
-asyncTimeout    START   №5,     start:22699271347840,   delay: 100
-asyncTimeout    START   №6,     start:22699271671910,   delay: 0
-resolvePromise  START   №7,     start:22699271776930
-syncTaskStart   START   №8,     start:22699271814390
-resolvePromise  STOP    №7,     stop:22699272133760,    duration: 0
-asyncTimeout    STOP    №6,     stop:22699272371900,    duration: 0,    delay: 0
-resolvePromise  STOP    №3,     stop:22699273545120,    duration: 0,    delay:0
-asyncTimeout    STOP    №5,     stop:22699371773869,    duration: 0,    delay: 100
-resolvePromise  STOP    №4,     stop:22699372988809,    duration: 0,    delay:100
-*/
+	//let isLogStart = true;
+
+	Freezing file:///home/bsk/doc/idea_work/bskydive/rxjs-pqnejm-async/index.html DocumentFreezer.js:81:15
+		sendSyncMessage suspend #0/1 SyncMessage.js:226:19
+	Unfreezing file:///home/bsk/doc/idea_work/bskydive/rxjs-pqnejm-async/index.html DocumentFreezer.js:97:15
+		sendSyncMessage finalizing SyncMessage.js:244:19
+		sendSyncMessage resume #0/0 - 76ms SyncMessage.js:235:19
+		sendSyncMessage finalizing SyncMessage.js:244:19
+
+	sumLoopStart	START	№1, 	start:119
+	sumLoopStart	STOP	№1, 	stop:7214,	duration: 7
+	createPromise	START	№2, 	start:7214
+	createPromise	STOP	№2, 	stop:7215,	duration: 0
+	resolvePromise	START	№3, 	start:7215, 				delay:0
+	resolvePromise	START	№4, 	start:7215, 				delay:100
+	asyncTimeout	START	№5, 	start:7215, 				delay: 100
+	asyncTimeout	START	№6, 	start:7215, 				delay: 0
+	resolvePromise	START	№7, 	start:7215
+	syncTaskStart	START	№8, 	start:7215
+	resolvePromise	STOP	№7, 	stop:7215,	duration: 0
+	asyncTimeout	STOP	№6, 	stop:7228,	duration: 0,	delay: 0
+	resolvePromise	STOP	№3, 	stop:7228,	duration: 0,	delay:0
+	asyncTimeout	STOP	№5, 	stop:7315,	duration: 0,	delay: 100
+	resolvePromise	STOP	№4, 	stop:7316,	duration: 0,	delay:100
 
 
-/*
-let p;
-p = new Promise((resolve) => {resolve(null);}).then(() => {setTimeout(() => {console.log(2)}, 0);}).then(() => {setTimeout(() => {console.log(3)}, 0);});
-p = new Promise((resolve) => {resolve(null);}).then(() => {setTimeout(() => {console.log(4)}, 0);});
-p = setTimeout(() => {console.log(5)}, 0);
+	//let isLogStart = false;
 
-output:
-5
+	Freezing file:///home/bsk/doc/idea_work/bskydive/rxjs-pqnejm-async/index.html DocumentFreezer.js:81:15
+		sendSyncMessage suspend #0/1 SyncMessage.js:226:19
+	Unfreezing file:///home/bsk/doc/idea_work/bskydive/rxjs-pqnejm-async/index.html DocumentFreezer.js:97:15
+		sendSyncMessage finalizing SyncMessage.js:244:19
+		sendSyncMessage resume #0/0 - 60ms SyncMessage.js:235:19
+		sendSyncMessage finalizing SyncMessage.js:244:19
+
+	sumLoopStart	STOP	№1, 	stop:7120,	duration: 7 		
+	createPromise	STOP	№2, 	stop:7121,	duration: 0 		
+	syncTaskStart	START	№8, 	start:7121						
+	resolvePromise	STOP	№7, 	stop:7121,	duration: 0 		
+	asyncTimeout	STOP	№6, 	stop:7135,	duration: 0,	delay: 0
+	resolvePromise	STOP	№3, 	stop:7135,	duration: 0,	delay:0
+	asyncTimeout	STOP	№5, 	stop:7220,	duration: 0,	delay: 100
+	resolvePromise	STOP	№4, 	stop:7222,	duration: 0,	delay:100
+
+ // chrome
+
+	//let isLogStart = true;
+
+	sumLoopStart	START	№1, 	start:23							
+	sumLoopStart	STOP	№1, 	stop:6922,	duration: 6				
+	createPromise	START	№2, 	start:6922							
+	createPromise	STOP	№2, 	stop:6922,	duration: 0				
+	resolvePromise	START	№3, 	start:6923,					delay:0	
+	resolvePromise	START	№4, 	start:6923,					delay:100
+	asyncTimeout	START	№5, 	start:6923,					delay: 100
+	asyncTimeout	START	№6, 	start:6923,					delay: 0
+	resolvePromise	START	№7, 	start:6923							
+	syncTaskStart	START	№8, 	start:6923							
+	resolvePromise	STOP	№7, 	stop:6923,	duration: 0				
+	asyncTimeout	STOP	№6, 	stop:6924,	duration: 0,	delay: 0
+	resolvePromise	STOP	№3, 	stop:6925,	duration: 0,	delay:0	
+	asyncTimeout	STOP	№5, 	stop:7023,	duration: 0,	delay: 100
+	resolvePromise	STOP	№4, 	stop:7023,	duration: 0,	delay:100
+
+	//let isLogStart = false;
+	sumLoopStart	STOP	№1, 	stop:6938,	duration: 6
+	createPromise	STOP	№2, 	stop:6938,	duration: 0
+	syncTaskStart	START	№8, 	start:6938			
+	resolvePromise	STOP	№7, 	stop:6938,	duration: 0
+	asyncTimeout	STOP	№6, 	stop:6939,	duration: 0,	delay: 0
+	resolvePromise	STOP	№3, 	stop:6939,	duration: 0,	delay:0	
+	asyncTimeout	STOP	№5, 	stop:7038,	duration: 0,	delay: 100
+	resolvePromise	STOP	№4, 	stop:7038,	duration: 0,	delay:100
+
+ // node
+
+	// let isLogStart = true;
+
+	sumLoopStart    START   №1,     start:19601489889960
+	sumLoopStart    STOP    №1,     stop:19608610821399,    duration: 7
+	createPromise   START   №2,     start:19608611139578
+	createPromise   STOP    №2,     stop:19608611191338,    duration: 0
+	resolvePromise  START   №3,     start:19608611237798,   delay:0
+	resolvePromise  START   №4,     start:19608611261678,   delay:100
+	asyncTimeout    START   №5,     start:19608611305208,   delay: 100
+	asyncTimeout    START   №6,     start:19608611635178,   delay: 0
+	resolvePromise  START   №7,     start:19608611738468
+	syncTaskStart   START   №8,     start:19608611779628
+	resolvePromise  STOP    №7,     stop:19608612112808,    duration: 0
+	asyncTimeout    STOP    №6,     stop:19608612353548,    duration: 0,    delay: 0
+	resolvePromise  STOP    №3,     stop:19608613528687,    duration: 0,    delay:0
+	asyncTimeout    STOP    №5,     stop:19608711770460,    duration: 0,    delay: 100
+	resolvePromise  STOP    №4,     stop:19608713000009,    duration: 0,    delay:100
+
+	//let isLogStart = false;
+
+	sumLoopStart    STOP    №1,     stop:19160621265246,    duration: 7
+	createPromise   STOP    №2,     stop:19160624643124,    duration: 0
+	syncTaskStart   START   №8,     start:19160625139793
+	resolvePromise  STOP    №7,     stop:19160625437413,    duration: 0
+	asyncTimeout    STOP    №6,     stop:19160626731622,    duration: 0,    delay: 0
+	resolvePromise  STOP    №3,     stop:19160626804962,    duration: 0,    delay:0
+	asyncTimeout    STOP    №5,     stop:19160725069085,    duration: 0,    delay: 100
+	resolvePromise  STOP    №4,     stop:19160725195275,    duration: 0,    delay:100
+	*/
+function runExampleLog() {
+	sumLoop(1, 10000000000);
+	ps = createPromise$(2);
+	resolvePromiseTimeout$(3, ps, 0);
+	resolvePromiseTimeout$(4, ps, 100);
+	asyncTimeout$(5, 100);
+	asyncTimeout$(6, 0);
+	resolvePromise$(7, ps);
+	syncTask(8);
+}
+
+
+
+/**
+ *
+ * output:
+// firefox
+Freezing file:///home/bsk/doc/idea_work/bskydive/rxjs-pqnejm-async/index.html DocumentFreezer.js:81:15
+sendSyncMessage suspend #0/1 SyncMessage.js:226:19
+Unfreezing file:///home/bsk/doc/idea_work/bskydive/rxjs-pqnejm-async/index.html DocumentFreezer.js:97:15
+sendSyncMessage finalizing SyncMessage.js:244:19
+sendSyncMessage resume #0/0 - 47ms SyncMessage.js:235:19
+sendSyncMessage finalizing SyncMessage.js:244:19
+
+1
 2
-4
 3
+4
+1.1
+2.1
+3.1
+1.2
+2.2
+1.3
 
-queue:
-p = new Promise((resolve) => {resolve();})
-p = new Promise((resolve) => {resolve();})
-p = setTimeout(() => {console.log(5)}, 0);
-.then(() => {setTimeout(() => {console.log(2)}, 0);})
-.then(() => {setTimeout(() => {console.log(4)}, 0);});
-.then(() => {setTimeout(() => {console.log(3)}, 0);});
+//chrome
+1
+2
+3
+4
+1.1
+2.1
+3.1
+1.2
+2.2
+1.3
 
-*/
+ // node
+	1
+	2
+	3
+	4
+	1.1
+	2.1
+	3.1
+	1.2
+	2.2
+	1.3
+
+	queue:
+
+	p = new Promise((resolve) => { console.log(1); resolve(null); })
+	p = new Promise((resolve) => { console.log(2); resolve(null); })
+	p = new Promise((resolve) => { console.log(3); resolve(null); })
+	p = setTimeout(() => { console.log(4) }, 0);
+	.then(() => { setTimeout(() => { console.log(1.1) }, 0); })
+	.then(() => { setTimeout(() => { console.log(2.1) }, 0); })
+	.then(() => { setTimeout(() => { console.log(3.1) }, 0); });
+	.then(() => { setTimeout(() => { console.log(2.2) }, 0); })
+	.then(() => { setTimeout(() => { console.log(3.2) }, 0); });
+ */
+// prettier-ignore
+function runExampleNested() {
+	let p;
+
+	p = new Promise((resolve) => { console.log(1); resolve(null); })
+		.then(() => { setTimeout(() => { console.log(1.1) }, 0); })
+		.then(() => { setTimeout(() => { console.log(1.2) }, 0); })
+		.then(() => { setTimeout(() => { console.log(1.3) }, 0); });
+	p = new Promise((resolve) => { console.log(2); resolve(null); })
+		.then(() => { setTimeout(() => { console.log(2.1) }, 0); })
+		.then(() => { setTimeout(() => { console.log(2.2) }, 0); });
+	p = new Promise((resolve) => { console.log(3); resolve(null); })
+		.then(() => { setTimeout(() => { console.log(3.1) }, 0); });
+	p = setTimeout(() => { console.log(4) }, 0);
+}
+
+
+//=========================================================================================
+//====================================== CONFIG ===========================================
+//=========================================================================================
+
+let isLogStart = false;
+
+// runExampleSimple();
+// runExampleLog();
+runExampleNested();

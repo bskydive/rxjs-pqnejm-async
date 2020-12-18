@@ -9,7 +9,8 @@
 		"lint:ts": "tslint -c tslint.json -p ./tsconfig.json"
 	},
 	"dependencies": {
-		"@types/node": "^14.14.11"
+		"@types/node": "^14.14.11",
+		"rxjs": "latest"
 	},
 	"devDependencies": {
 		"@typescript-eslint/parser": "^4.9.1",

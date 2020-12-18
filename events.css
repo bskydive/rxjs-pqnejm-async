@@ -1,0 +1,18 @@
+html {
+	font-size: 15px;
+	font-family: sans-serif;
+	line-height: 1.9;
+}
+
+.outer {
+	background: #D4D4D4;
+	padding: 25px;
+	width: 92px;
+	margin: 0 auto;
+}
+
+.inner {
+	background: #ADADAD;
+	padding: 46px;
+	width: 0;
+}

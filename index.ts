@@ -1,4 +1,6 @@
-import { Observable } from 'rxjs';
+import { concurrentFabric } from './draft';
+import { of } from 'rxjs';
+
 
 /* eslint-disable no-console */
 
@@ -187,14 +189,14 @@ let ps: Promise<any>;
 // prettier-ignore
 function runExampleSimple() {
 	console.log(1);
-	const promise = new Promise(resolve => {​​​​​​​​ resolve(null) }​​​​​​​​);
-	promise.then(() => {​​​​​​​​ setTimeout(() => {​​​​​​​​ console.log(2); }​​​​​​​​) }​​​​​​​​);
-	setTimeout(() => {​​​​​​​​ console.log(3); }​​​​​​​​, 500);
-	if (typeof process !== 'undefined') {  // node
-		setImmediate(() => {​​​​​​​​ console.log(4); }​​​​​​​​);
+	const promise = new Promise(resolve => { resolve(null) });
+	promise.then(() => { setTimeout(() => { console.log(2); }) });
+	setTimeout(() => { console.log(3); }, 500);
+	if (typeof process !== 'undefined') { // node
+		setImmediate(() => { console.log(4); });
 	}
-	setTimeout(() => {​​​​​​​​ console.log(5); }​​​​​​​​, 0);
-	promise.then(() => {​​​​​​​​ console.log(6); }​​​​​​​​);
+	setTimeout(() => { console.log(5); }, 0);
+	promise.then(() => { console.log(6); });
 	console.log(7);
 }
 
@@ -319,8 +321,6 @@ function runExampleLog() {
 	syncTask(8);
 }
 
-
-
 /**
  *
  * output:
@@ -404,4 +404,9 @@ let isLogStart = false;
 
 // runExampleSimple();
 // runExampleLog();
-runExampleNested();
+// runExampleNested();
+
+let src = [of(1), of(2), of(3), of(4), of(5), of(6), of(7)];
+
+concurrentFabric(src, 2);
+console.log('ss');

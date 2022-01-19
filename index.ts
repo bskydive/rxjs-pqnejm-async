@@ -207,9 +207,9 @@ function runExampleSimple() {
 
 	//let isLogStart = true;
 
-	Freezing file:///home/bsk/doc/idea_work/bskydive/rxjs-pqnejm-async/index.html DocumentFreezer.js:81:15
+	Freezing file:///doc/rxjs-pqnejm-async/index.html DocumentFreezer.js:81:15
 		sendSyncMessage suspend #0/1 SyncMessage.js:226:19
-	Unfreezing file:///home/bsk/doc/idea_work/bskydive/rxjs-pqnejm-async/index.html DocumentFreezer.js:97:15
+	Unfreezing file:///doc/rxjs-pqnejm-async/index.html DocumentFreezer.js:97:15
 		sendSyncMessage finalizing SyncMessage.js:244:19
 		sendSyncMessage resume #0/0 - 76ms SyncMessage.js:235:19
 		sendSyncMessage finalizing SyncMessage.js:244:19
@@ -233,9 +233,9 @@ function runExampleSimple() {
 
 	//let isLogStart = false;
 
-	Freezing file:///home/bsk/doc/idea_work/bskydive/rxjs-pqnejm-async/index.html DocumentFreezer.js:81:15
+	Freezing file:///doc/rxjs-pqnejm-async/index.html DocumentFreezer.js:81:15
 		sendSyncMessage suspend #0/1 SyncMessage.js:226:19
-	Unfreezing file:///home/bsk/doc/idea_work/bskydive/rxjs-pqnejm-async/index.html DocumentFreezer.js:97:15
+	Unfreezing file:///doc/rxjs-pqnejm-async/index.html DocumentFreezer.js:97:15
 		sendSyncMessage finalizing SyncMessage.js:244:19
 		sendSyncMessage resume #0/0 - 60ms SyncMessage.js:235:19
 		sendSyncMessage finalizing SyncMessage.js:244:19
@@ -325,9 +325,9 @@ function runExampleLog() {
  *
  * output:
 // firefox
-Freezing file:///home/bsk/doc/idea_work/bskydive/rxjs-pqnejm-async/index.html DocumentFreezer.js:81:15
+Freezing file:///doc/rxjs-pqnejm-async/index.html DocumentFreezer.js:81:15
 sendSyncMessage suspend #0/1 SyncMessage.js:226:19
-Unfreezing file:///home/bsk/doc/idea_work/bskydive/rxjs-pqnejm-async/index.html DocumentFreezer.js:97:15
+Unfreezing file:///doc/rxjs-pqnejm-async/index.html DocumentFreezer.js:97:15
 sendSyncMessage finalizing SyncMessage.js:244:19
 sendSyncMessage resume #0/0 - 47ms SyncMessage.js:235:19
 sendSyncMessage finalizing SyncMessage.js:244:19

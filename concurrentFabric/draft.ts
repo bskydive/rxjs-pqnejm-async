@@ -3,6 +3,16 @@ import { take, map } from 'rxjs/operators';
 
 
 
+let buttonDraft = document.querySelector('.button');
+
+function onClickDraft() {
+	console.log('click');
+}
+
+buttonDraft.addEventListener('click', onClickDraft);
+// button.dispatchEvent(new CustomEvent('click', {bubbles: true}));
+
+
 /**
  * Фабрика асинхронных исполнителей задач
  * concurrentFabric

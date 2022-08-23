@@ -8,11 +8,14 @@
 	* in the console:
 
 	```bash
+	# run in node
+	npm run start
 	# build and run in node
 	npm run b
 	# logfile for profiling
 	npm run log
 	```
+* debug works in [vscode](https://code.visualstudio.com/docs/nodejs/nodejs-debugging#_multi-version-support)
 * Configuration:
 	* `let isLogStart = true;` - logs START timing events
 

@@ -402,12 +402,12 @@ function runExampleNested() {
 
 
 // ===================================== async
-let isLogStart = false;
-// runExampleSimple();
+const isLogStart = false;
+runExampleSimple();
 // runExampleLog();
 // runExampleNested();
 
-console.log('ss');
+console.log('complete');
 // ===================================== concurrentFabric
 
 // let src = [of(1), of(2), of(3), of(4), of(5), of(6), of(7)];

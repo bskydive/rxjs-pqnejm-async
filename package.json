@@ -5,7 +5,8 @@
 	"scripts": {
 		"b": "tsc --build tsconfig.json && node dist/out-tsc/index.js",
 		"log": "node --prof dist/out-tsc/index.js ",
-		"debug": "node --inspect dist/out-tsc/index.js ",
+		"start": "ts-node index.ts",
+		"debug": "ts-node index.ts",
 		"lint:ts": "tslint -c tslint.json -p ./tsconfig.json"
 	},
 	"dependencies": {

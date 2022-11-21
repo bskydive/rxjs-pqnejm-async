@@ -408,5 +408,5 @@ let isLogStart = false;
 
 let src = [of(1), of(2), of(3), of(4), of(5), of(6), of(7)];
 
-concurrentFabric(src, 2);
+// concurrentFabric(src, 2);
 console.log('ss');

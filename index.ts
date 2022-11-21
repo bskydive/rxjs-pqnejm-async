@@ -1,4 +1,4 @@
-import { concurrentFabric } from './draft';
+import { concurrentFabric } from './concurrentFabric/draft';
 import { of } from 'rxjs';
 
 
@@ -400,13 +400,20 @@ function runExampleNested() {
 //====================================== CONFIG ===========================================
 //=========================================================================================
 
-let isLogStart = false;
 
-// runExampleSimple();
+// ===================================== async
+const isLogStart = false;
+runExampleSimple();
 // runExampleLog();
 // runExampleNested();
 
-let src = [of(1), of(2), of(3), of(4), of(5), of(6), of(7)];
+console.log('complete');
+// ===================================== concurrentFabric
 
+// let src = [of(1), of(2), of(3), of(4), of(5), of(6), of(7)];
 // concurrentFabric(src, 2);
-console.log('ss');
+
+// ===================================== singleton
+
+
+

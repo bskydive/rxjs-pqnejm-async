@@ -1,0 +1,12 @@
+html {
+	font-size: 15px;
+	font-family: sans-serif;
+	line-height: 1.9;
+}
+
+.button {
+	background: #D4D4D4;
+	padding: 25px;
+	width: 92px;
+	margin: 0 auto;
+}
